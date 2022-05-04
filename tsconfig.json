@@ -1,0 +1,28 @@
+{
+    "include": [
+        "src/*.ts",
+        "src/*.vue",
+        "src/**/*.vue",
+        "src/**/*.ts",
+    ],
+    "exclude": [
+        "node_module", "dist"
+    ],
+    "compilerOptions": {
+        "strict": true,
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        "baseUrl": ".",
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "isolatedModules": true,
+        "noEmit": true
+    },
+    "extends": "@vue/tsconfig/tsconfig.web.json",
+    "references": [
+        {"path": ""}
+    ]
+}
