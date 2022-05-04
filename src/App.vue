@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-    
 </script>
 
 <template>
-    hello
+xx
 </template>
 
 <style>

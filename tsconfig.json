@@ -9,6 +9,7 @@
         "node_module", "dist"
     ],
     "compilerOptions": {
+        "types": ["element-plus/global"],
         "strict": true,
         "paths": {
             "@/*": ["src/*"]
