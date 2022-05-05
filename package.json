@@ -10,7 +10,10 @@
   "dependencies": {
     "@types/node": "^17.0.31",
     "element-plus": "^2.1.11",
-    "vue": "^3.2.25"
+    "sass": "^1.51.0",
+    "sass-loader": "^12.6.0",
+    "vue": "^3.2.25",
+    "vue-router": "4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
