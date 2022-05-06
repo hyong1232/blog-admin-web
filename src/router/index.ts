@@ -1,23 +1,40 @@
-import { h } from "vue";
+import { h, resolveComponent } from "vue";
 import {
   createRouter,
   createWebHistory,
+  RouterView,
   type RouteRecordRaw,
 } from "vue-router";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/",
-    component: { displayName: "blogHome", render: () => h("router-view") },
+    path: "/blog",
+    component: RouterView,
+    // component: { render: () => h(resolveComponent("router-view"))},
     children: [
-      { path: "/blog", component: () => import("@/components/blog.vue") },
+      { path: "", component: () => import("@/components/blog/blog.vue") },
       {
-        path: "blog/edit",
-        component: () => import("@/components/blogDetail.vue"),
+        path: "/edit",
+        component: () => import("@/components/blog/blogDetail.vue"),
       },
       {
-        path: "blog/edit/:id",
-        component: () => import("@/components/blogDetail.vue"),
+        path: "/edit/:id",
+        component: () => import("@/components/blog/blogDetail.vue"),
+      },
+    ],
+  },
+  {
+    path: "/diary",
+    component: { render: () => h(resolveComponent("router-view"))},
+    children: [
+      { path: "", component: () => import("@/components/diary/diary.vue") },
+      {
+        path: "/edit",
+        component: () => import("@/components/diary/diaryDetail.vue"),
+      },
+      {
+        path: "/edit/:id",
+        component: () => import("@/components/diary/diaryDetail.vue"),
       },
     ],
   },

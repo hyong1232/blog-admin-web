@@ -36,8 +36,7 @@
 
       <el-main>
         <el-scrollbar>
-            <router-view class="router-view" v-slot="{ Component }">
-            </router-view>
+            <router-view></router-view>
         </el-scrollbar>
       </el-main>
     </el-container>
