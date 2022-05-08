@@ -69,6 +69,13 @@ const menuArr = reactive([
           { path: "/diary/edit", title: "日志详情" },
         ],
       },
+      {
+        name: "分类",
+        children: [
+          { path: "/category", title: "分类列表" },
+          { path: "/category/edit", title: "分类详情" },
+        ],
+      },
     ],
   },
 ]);

@@ -11,13 +11,20 @@
           :fixed="col.fixed"
           :label="col.label"
         >
-          <template #default="scope" v-if="col.prop === 'operation'">
+          <template #default="{$index, row}" v-if="col.prop === 'operation'">
             <el-button
               type="text"
               size="small"
-              @click.prevent="deleteRow(scope.$index)"
+              @click.prevent="deleteRow($index)"
             >
               Remove
+            </el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click.prevent="editRow(row._id)"
+            >
+              edit
             </el-button>
           </template>
         </el-table-column>
@@ -27,7 +34,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, ref } from "vue";
+import { useRouter } from 'vue-router';
+import { ElNotification } from 'element-plus';
+import {request} from '@/hooks/request';
+import { reactive, toRefs, ref, onMounted } from "vue";
 
 const tabConf = [
   { order: 1, prop: "title", label: "标题", width: "14%", fixed: false },
@@ -52,10 +62,35 @@ const tabConf = [
   { order: 8, prop: "operation", label: "操作", width: "12%", fixed: 'right' },
 ];
 
-const dataSource = ref([]);
+const router = useRouter();
+
+let dataSource = ref([]);
+
+const editRow = (id: string) => {
+    router.push(`/blog/edit/${id}`)
+}
+
 const deleteRow = (index: number) => {
   console.log(index);
 };
+
+const fetchGridData = async () => {
+    try {
+        const res = await request({
+            url: '/article',
+            method: 'get',
+        })
+        dataSource.value = res.data?.data;
+    } catch (error) {
+        ElNotification.error({title: 'error', message: error});
+        console.error(error);
+    }
+}
+
+onMounted(() => {
+    fetchGridData();
+})
+
 </script>
 
 <style lang="scss" scoped></style>

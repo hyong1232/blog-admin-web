@@ -7,10 +7,19 @@ import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      "/admin": {
+        target: "http://192.168.1.10:8086",
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/admin/, '/admin')
+      },
+    },
+  },
   resolve: {
-      alias: {
-          "@": resolve(__dirname, "src/")
-      }
+    alias: {
+      "@": resolve(__dirname, "src/"),
+    },
   },
   plugins: [
     vue(),
