@@ -1,11 +1,11 @@
 <template>
+  <div class="container">
     <div class="nav">
         <el-button type="danger" @click="batchDeleteHandler">batch delete</el-button>
     </div>
-  <div class="container">
-    <el-table :data="dataSource" @selection-change="handleSelectionChange" style="width: 100%" max-height="500px">
-    <el-table-column type="selection" width="55" />
-      <template v-for="(col, i) in tabConf" :key="col.order">
+    <el-table :data="dataSource" style="width: 100%" @selection-change="handleSelectionChange" max-height="500px">
+     <el-table-column type="selection" width="55" />
+      <template v-for="(col, i) in tabConf" :key="col.order"> 
         <el-table-column
           :stripe="true"
           header-align="center"
@@ -38,16 +38,15 @@
 </template>
 
 <script lang="ts" setup>
+import type { ElTable } from 'element-plus'
 import { useRouter } from 'vue-router';
-import { ElNotification, ElMessageBox } from 'element-plus';
+import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
 import {request} from '@/hooks/request';
 import { reactive, toRefs, ref, onMounted } from "vue";
 
 const tabConf = [
   { order: 1, prop: "_id", label: "ID", width: "14%", fixed: false },
   { order: 2, prop: "name", label: "名称", width: "12%", fixed: false },
-  { order: 3, prop: "createdAt", label: "创建时间", width: "14%", fixed: false },
-  { order: 4, prop: "updatedAt", label: "更新时间", width: "14%", fixed: false },
   { order: 5, prop: "author", label: "作者", width: "12%", fixed: false },
   {
     order: 6,
@@ -71,9 +70,8 @@ const router = useRouter();
 let dataSource = ref([]);
 
 const editRow = (id: string) => {
-    router.push(`/category/edit/${id}`)
+    router.push(`/tag/edit/${id}`)
 }
-
 
 const deleteRow = async (row: any) => {
   try {
@@ -86,12 +84,12 @@ const deleteRow = async (row: any) => {
             type: 'warning',
             }
         ) 
-    const res = await request({url: `/category/${row._id}`, method: 'delete'})
+    const res = await request({url: `/tag/${row._id}`, method: 'delete'})
     if (res.code === 200) {
             fetchGridData();
-            ElNotification.success({title: 'success', message: `delete category sucess`})
+            ElNotification.success({title: 'success', message: ` delete tag sucess`})
         } else {
-            ElNotification.error({title: 'error', message: 'delete category failed'})
+            ElNotification.error({title: 'error', message: 'delete tag failed'})
         }
   } catch(e) {
       console.error(e);
@@ -101,7 +99,7 @@ const deleteRow = async (row: any) => {
 const fetchGridData = async () => {
     try {
         const res = await request({
-            url: '/category',
+            url: '/tag',
             method: 'get',
         })
         dataSource.value = res.data;
@@ -122,7 +120,7 @@ const batchDeleteHandler = async() => {
             return;
         }
         const ids = multipleSelection.value.map(v => v._id)
-        const res = await request({url: '/category/batchdelete', method: 'post', body: ids})
+        const res = await request({url: '/tag/batchdelete', method: 'post', body: ids})
         if(res.code === 200) {
             fetchGridData();
         } else {
@@ -132,6 +130,7 @@ const batchDeleteHandler = async() => {
         console.error(e)
     }
 }
+
 
 onMounted(() => {
     fetchGridData();

@@ -13,8 +13,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: "/blog",
-                component: RouterView,
-                // component: { render: () => h(resolveComponent("router-view"))},
+                component: { render: () => h(resolveComponent("router-view"))},
                 children: [
                     { path: "", component: () => import("@/views/blog/blog.vue") },
                     {
@@ -41,6 +40,22 @@ const routes: RouteRecordRaw[] = [
                         path: "edit/:id",
                         props: true,
                         component: () => import("@/views/diary/diaryDetail.vue"),
+                    },
+                ],
+            },
+            {
+                path: "/tag",
+                component: { render: () => h(resolveComponent("router-view")) },
+                children: [
+                    { path: "", component: () => import("@/views/tag/tag.vue") },
+                    {
+                        path: "edit",
+                        component: () => import("@/views/tag/tagDetail.vue"),
+                    },
+                    {
+                        path: "edit/:id",
+                        props: true,
+                        component: () => import("@/views/tag/tagDetail.vue"),
                     },
                 ],
             },

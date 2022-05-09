@@ -70,6 +70,13 @@ const menuArr = reactive([
         ],
       },
       {
+        name: "标签",
+        children: [
+          { path: "/tag", title: "标签列表" },
+          { path: "/tag/edit", title: "标签详情" },
+        ],
+      },
+      {
         name: "分类",
         children: [
           { path: "/category", title: "分类列表" },

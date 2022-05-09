@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <el-table :data="dataSource" style="width: 100%" max-height="500px">
+    <el-table-column type="selection" width="55" />
       <template v-for="(col, i) in tabConf" :key="col.order">
         <el-table-column
           :stripe="true"
@@ -13,14 +14,14 @@
         >
           <template #default="{$index, row}" v-if="col.prop === 'operation'">
             <el-button
-              type="text"
+              type="danger"
               size="small"
-              @click.prevent="deleteRow($index)"
+              @click.prevent="deleteRow(row)"
             >
-              Remove
+              delete
             </el-button>
             <el-button
-              type="text"
+              type="primary"
               size="small"
               @click.prevent="editRow(row._id)"
             >
@@ -35,7 +36,7 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { ElNotification } from 'element-plus';
+import { ElNotification, ElMessageBox } from 'element-plus';
 import {request} from '@/hooks/request';
 import { reactive, toRefs, ref, onMounted } from "vue";
 
@@ -70,22 +71,41 @@ const editRow = (id: string) => {
     router.push(`/blog/edit/${id}`)
 }
 
-const deleteRow = (index: number) => {
-  console.log(index);
-};
-
 const fetchGridData = async () => {
     try {
         const res = await request({
             url: '/article',
             method: 'get',
         })
-        dataSource.value = res.data?.data;
+        dataSource.value = res.data;
     } catch (error) {
         ElNotification.error({title: 'error', message: error});
         console.error(error);
     }
 }
+
+const deleteRow = async (row: any) => {
+  try {
+       await ElMessageBox.confirm(
+            `proxy will permanently delete the row Record ${row.name}. Continue?`,
+            'Warning',
+            {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+            }
+        ) 
+    const res = await request({url: `/article/${row._id}`, method: 'delete'})
+    if (res.code === 200) {
+            fetchGridData();
+            ElNotification.success({title: 'success', message: ` delete article sucess`})
+        } else {
+            ElNotification.error({title: 'error', message: 'delete article failed'})
+        }
+  } catch(e) {
+      console.error(e);
+  }
+};
 
 onMounted(() => {
     fetchGridData();

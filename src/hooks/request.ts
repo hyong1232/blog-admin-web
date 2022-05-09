@@ -2,7 +2,7 @@ import type { App } from "vue";
 import { ElLoading } from 'element-plus'
 import { ElNotification } from 'element-plus'
 
-export async function request(config: {method: string, url: string, body?: any}, options: { baseUrl?: string, async?: boolean } = { baseUrl: '/admin' }): Promise<{ data: any; code: number }> {
+export async function request(config: {method: string, url: string, body?: any}, options: { baseUrl?: string, async?: boolean } = { baseUrl: '/admin' }): Promise<any> {
     const { method, url, body } = config;
     let requrl = "";
     if (options) {
@@ -13,6 +13,7 @@ export async function request(config: {method: string, url: string, body?: any},
         text: 'Loading',
         background: 'rgba(0, 0, 0, 0.7)',
     })
+    config.body = JSON.stringify(config.body)
     if (window.fetch) {
         const res = await window.fetch(requrl, {
             ...config,
@@ -24,13 +25,13 @@ export async function request(config: {method: string, url: string, body?: any},
         try {
             const data = await res.json();
             if (res.ok && res.status >= 200 && res.status < 300) {
-                return { data, code: res.status };
+                return data.code || data.data ? data : {data, code: 200};
             } else {
                 ElNotification.error({
                     title: "error",
                     message: data?.message || `code: ${res.status}, request failed`,
                 });
-                return { data: data.data, code: res.status };
+                return data.code || data.data ? data : {data, code: 200};
             }
         } catch (error) {
             console.error(error);

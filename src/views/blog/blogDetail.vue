@@ -158,7 +158,7 @@ const props = defineProps({
 
 let model = ref({})
 
-const fetchGridData = async () => {
+const fetchGridDataById = async () => {
     try {
         const res = await request({url: `/article/${props.id}`, method: 'get'});
         model = res.data;
@@ -169,7 +169,7 @@ const fetchGridData = async () => {
 }
 
 onMounted(() => {
-    fetchGridData();
+    props?.id && fetchGridDataById();
 })
 
 
