@@ -25,13 +25,27 @@ export async function request(config: {method: string, url: string, body?: any},
         try {
             const data = await res.json();
             if (res.ok && res.status >= 200 && res.status < 300) {
-                return data.code || data.data ? data : {data, code: 200};
+                let temp;
+                if(data.code || data.data) {
+                    data.code = 200;
+                    temp = data;
+                } else {
+                    temp = {data, code: 200};
+                }
+                return temp;
             } else {
                 ElNotification.error({
                     title: "error",
                     message: data?.message || `code: ${res.status}, request failed`,
                 });
-                return data.code || data.data ? data : {data, code: 200};
+                let temp;
+                if(data.code || data.data) {
+                    data.code = 200;
+                    temp = data;
+                } else {
+                    temp = {data, code: 200};
+                }
+                return temp;
             }
         } catch (error) {
             console.error(error);

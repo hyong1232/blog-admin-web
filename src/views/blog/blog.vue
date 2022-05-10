@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <el-table :data="dataSource" style="width: 100%" max-height="500px">
+      <div class="nav">
+        <el-button type="danger" @click="batchDeleteHandler">batch delete</el-button>
+    </div>
+    <el-table :data="dataSource" style="width: 100%" @selection-change="handleSelectionChange" max-height="500px">
     <el-table-column type="selection" width="55" />
       <template v-for="(col, i) in tabConf" :key="col.order">
         <el-table-column
@@ -78,9 +81,33 @@ const fetchGridData = async () => {
             method: 'get',
         })
         dataSource.value = res.data;
-    } catch (error) {
+    } catch (error: Error) {
         ElNotification.error({title: 'error', message: error});
         console.error(error);
+    }
+}
+
+const multipleSelection = ref<any[]>([])
+
+const handleSelectionChange = (val: any) => {
+    multipleSelection.value = val;
+}
+
+const batchDeleteHandler = async() => {
+    try {
+        if(!multipleSelection.value.length) {
+            await  ElMessageBox.confirm('choose one record, please', 'Tips', {showCancelButton: false, type: 'warning',})
+            return;
+        }
+        const ids = multipleSelection.value.map(v => v._id)
+        const res = await request({url: '/article/batchdelete', method: 'post', body: ids})
+        if(res.code === 200) {
+            fetchGridData();
+        } else {
+            ElNotification.error({title: 'error', message: 'batch delete failed'})
+        }
+    } catch(e) {
+        console.error(e)
     }
 }
 
@@ -113,4 +140,11 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.nav {
+    margin: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+</style>
