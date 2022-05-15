@@ -15,6 +15,21 @@
           :fixed="col.fixed"
           :label="col.label"
         >
+          <template #default="{row}" v-if="col.prop === 'tag'">
+            {{ computedTag(row?.tag)}}
+          </template>
+          <template #default="{row}" v-if="col.prop === 'category'">
+            {{row?.category?.name}}
+          </template>
+          <template #default="{row}" v-if="col.prop === 'author'">
+            {{row?.author?.username}}
+          </template>
+          <template #default="{row}" v-if="col.prop === 'updatedAt'">
+            {{ dateTransformer(row?.updatedAt)}}
+          </template>
+          <template #default="{row}" v-if="col.prop === 'createdAt'">
+            {{ dateTransformer(row?.createdAt)}}
+          </template>
           <template #default="{$index, row}" v-if="col.prop === 'operation'">
             <el-button
               type="danger"
@@ -38,6 +53,7 @@
 </template>
 
 <script lang="ts" setup>
+import * as moment from 'moment'
 import { useRouter } from 'vue-router';
 import { ElNotification, ElMessageBox } from 'element-plus';
 import {request} from '@/hooks/request';
@@ -51,7 +67,7 @@ const tabConf = [
   { order: 5, prop: "author", label: "作者", width: "12%", fixed: false },
   {
     order: 6,
-    prop: "careatedAt",
+    prop: "createdAt",
     label: "创作日期",
     width: "12%",
     fixed: false,
@@ -65,6 +81,17 @@ const tabConf = [
   },
   { order: 8, prop: "operation", label: "操作", width: "12%", fixed: 'right' },
 ];
+
+const dateTransformer = (date: Date) => {
+    return moment(date).format('yyyy-MM-DD h:mm:ss');
+}
+
+const computedTag = (target: any[]) => {
+    if (!target.length) {
+        return '';
+    };
+    return target.map(v => v.name).join();
+}
 
 const router = useRouter();
 

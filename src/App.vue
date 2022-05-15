@@ -36,7 +36,13 @@
 
       <el-main>
         <el-scrollbar>
-            <router-view></router-view>
+            <RouterView #default="{Component}">
+                <template v-if="Component">
+                   <Ct mode="out-in">
+                       <component :is="Component"></component>
+                   </Ct> 
+                </template>
+            </RouterView>
         </el-scrollbar>
       </el-main>
     </el-container>
@@ -44,6 +50,7 @@
 </template>
 
 <script lang="ts" setup>
+import Ct from '@/components/ct.vue';
 import { ref, reactive } from "vue";
 import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 

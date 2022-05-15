@@ -2,8 +2,8 @@ import type { App } from "vue";
 import { ElLoading } from 'element-plus'
 import { ElNotification } from 'element-plus'
 
-export async function request(config: {method: string, url: string, body?: any}, options: { baseUrl?: string, async?: boolean } = { baseUrl: '/admin' }): Promise<any> {
-    const { method, url, body } = config;
+export async function request(config: {method: string, url: string, body?: any, params?: any}, options: { baseUrl?: string, async?: boolean } = { baseUrl: '/admin' }): Promise<any> {
+    const { method, url, body, params } = config;
     let requrl = "";
     if (options) {
         requrl = options.baseUrl + url;
@@ -15,6 +15,9 @@ export async function request(config: {method: string, url: string, body?: any},
     })
     config.body = JSON.stringify(config.body)
     if (window.fetch) {
+        if(params) {
+            requrl = requrl + '?' + new URLSearchParams(params);
+        }
         const res = await window.fetch(requrl, {
             ...config,
             credentials: 'same-origin',

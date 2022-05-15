@@ -15,6 +15,12 @@
           :fixed="col.fixed"
           :label="col.label"
         >
+        <template #default="{row}" v-if="col.prop === 'updatedAt'">
+            {{dateTransform(row?.updatedAt)}}
+         </template>
+         <template #default="{row}" v-if="col.prop === 'createdAt'">
+            {{dateTransform(row?.createdAt)}}
+         </template>
           <template #default="{$index, row}" v-if="col.prop === 'operation'">
             <el-button
               type="danger"
@@ -38,6 +44,7 @@
 </template>
 
 <script lang="ts" setup>
+import dateTransform from '@/hooks/dateTransform';
 import { useRouter } from 'vue-router';
 import { ElNotification, ElMessageBox } from 'element-plus';
 import {request} from '@/hooks/request';
@@ -46,23 +53,9 @@ import { reactive, toRefs, ref, onMounted } from "vue";
 const tabConf = [
   { order: 1, prop: "_id", label: "ID", width: "14%", fixed: false },
   { order: 2, prop: "name", label: "名称", width: "12%", fixed: false },
+  { order: 5, prop: "author", label: "作者", width: "12%", fixed: false },
   { order: 3, prop: "createdAt", label: "创建时间", width: "14%", fixed: false },
   { order: 4, prop: "updatedAt", label: "更新时间", width: "14%", fixed: false },
-  { order: 5, prop: "author", label: "作者", width: "12%", fixed: false },
-  {
-    order: 6,
-    prop: "careatedAt",
-    label: "创作日期",
-    width: "12%",
-    fixed: false,
-  },
-  {
-    order: 7,
-    prop: "updatedAt",
-    label: "修改日期",
-    width: "12%",
-    fixed: false,
-  },
   { order: 8, prop: "operation", label: "操作", width: "12%", fixed: 'right' },
 ];
 

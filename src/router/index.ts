@@ -7,76 +7,46 @@ import {
 } from "vue-router";
 
 const routes: RouteRecordRaw[] = [
-    {
-        path: '/',
-        component: RouterView,
-        children: [
-            {
-                path: "/blog",
-                component: { render: () => h(resolveComponent("router-view"))},
-                children: [
-                    { path: "", component: () => import("@/views/blog/blog.vue") },
+                    { path: "/blog/", component: () => import("@/views/blog/blog.vue") },
                     {
-                        path: "edit",
+                        path: "/blog/edit",
                         component: () => import("@/views/blog/blogDetail.vue"),
                     },
                     {
-                        path: "edit/:id",
+                        path: "/blog/edit/:id",
                         props: true,
                         component: () => import("@/views/blog/blogDetail.vue"),
                     },
-                ],
-            },
-            {
-                path: "/diary",
-                component: { render: () => h(resolveComponent("router-view")) },
-                children: [
-                    { path: "", component: () => import("@/views/diary/diary.vue") },
+                    { path: "/diary", component: () => import("@/views/diary/diary.vue") },
                     {
-                        path: "edit",
+                        path: "/diary/edit",
                         component: () => import("@/views/diary/diaryDetail.vue"),
                     },
                     {
-                        path: "edit/:id",
+                        path: "/diary/edit/:id",
                         props: true,
                         component: () => import("@/views/diary/diaryDetail.vue"),
                     },
-                ],
-            },
-            {
-                path: "/tag",
-                component: { render: () => h(resolveComponent("router-view")) },
-                children: [
-                    { path: "", component: () => import("@/views/tag/tag.vue") },
+                    { path: "/tag", component: () => import("@/views/tag/tag.vue") },
                     {
-                        path: "edit",
+                        path: "/tag/edit",
                         component: () => import("@/views/tag/tagDetail.vue"),
                     },
                     {
-                        path: "edit/:id",
+                        path: "/tag/edit/:id",
                         props: true,
                         component: () => import("@/views/tag/tagDetail.vue"),
                     },
-                ],
-            },
-            {
-                path: "/category",
-                component: { render: () => h(resolveComponent("router-view")) },
-                children: [
-                    { path: "", component: () => import("@/views/category/category.vue") },
+                    { path: "/category", component: () => import("@/views/category/category.vue") },
                     {
-                        path: "edit",
+                        path: "/category/edit",
                         component: () => import("@/views/category/categoryDetail.vue"),
                     },
                     {
-                        path: "edit/:id",
+                        path: "/category/edit/:id",
                         props: true,
                         component: () => import("@/views/category/categoryDetail.vue"),
                     },
-                ],
-            },
-        ]
-    }
 ];
 
 const router = createRouter({

@@ -15,6 +15,12 @@
           :fixed="col.fixed"
           :label="col.label"
         >
+         <template #default="{row}" v-if="col.prop === 'updatedAt'">
+            {{dateTransform(row?.updatedAt)}}
+         </template>
+         <template #default="{row}" v-if="col.prop === 'createdAt'">
+            {{dateTransform(row?.createdAt)}}
+         </template>
           <template #default="{$index, row}" v-if="col.prop === 'operation'">
             <el-button
               type="danger"
@@ -34,10 +40,12 @@
         </el-table-column>
       </template>
     </el-table>
+    <el-pagination background layout="prev, pager, next"  :total="pager.total" :hide-on-single-page="true" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import dateTransform from '@/hooks/dateTransform';
 import type { ElTable } from 'element-plus'
 import { useRouter } from 'vue-router';
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
@@ -47,10 +55,10 @@ import { reactive, toRefs, ref, onMounted } from "vue";
 const tabConf = [
   { order: 1, prop: "_id", label: "ID", width: "14%", fixed: false },
   { order: 2, prop: "name", label: "名称", width: "12%", fixed: false },
-  { order: 5, prop: "author", label: "作者", width: "12%", fixed: false },
+//   { order: 5, prop: "author", label: "作者", width: "12%", fixed: false },
   {
     order: 6,
-    prop: "careatedAt",
+    prop: "createdAt",
     label: "创作日期",
     width: "12%",
     fixed: false,
@@ -96,14 +104,28 @@ const deleteRow = async (row: any) => {
   }
 };
 
+const pager = reactive({
+    pageSize: 20,
+    pageIndex: 1,
+    total: 0
+})
+
 const fetchGridData = async () => {
+    const params = {
+        populate: ['author'],
+        limit: pager.pageSize,
+        page: pager.pageIndex,
+        sort: "createdAt",
+    };
     try {
         const res = await request({
             url: '/tag',
             method: 'get',
+            params: {query: JSON.stringify(params)},
         })
         dataSource.value = res.data;
-    } catch (error) {
+        pager.total = res?.data?.total;
+    } catch (error: any) {
         ElNotification.error({title: 'error', message: error});
         console.error(error);
     }

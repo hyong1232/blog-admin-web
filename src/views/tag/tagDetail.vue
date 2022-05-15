@@ -1,5 +1,6 @@
 <template>
   <el-form
+    @submit.native.prevent
     ref="form"
     :model="sizeForm"
     label-width="auto"
@@ -28,7 +29,7 @@
       <el-input v-model="sizeForm.name" clearable size="large" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">{{
+      <el-button native-type="submit" type="primary" @click="onSubmit">{{
         id ? "submit" : "created"
       }}</el-button>
     </el-form-item>
@@ -66,7 +67,7 @@ const fetchtagOptions = async () => {
 const fetchtagDataById = async () => {
   try {
     const res = await request({ url: `/tag/${props.id}`, method: "get" });
-    sizeForm.value = res;
+    sizeForm.value = res.data;
   } catch (e) {
     console.error(e);
   }
