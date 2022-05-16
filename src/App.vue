@@ -39,7 +39,7 @@
             <RouterView #default="{Component}">
                 <template v-if="Component">
                    <Ct mode="out-in">
-                       <component :is="Component"></component>
+                       <component :is="Component" :key="route.path"></component>
                    </Ct> 
                 </template>
             </RouterView>
@@ -53,8 +53,11 @@
 import Ct from '@/components/ct.vue';
 import { ref, reactive } from "vue";
 import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+import { useRoute } from 'vue-router';
 
 const transitionName = ref('slide-left');
+
+const route = useRoute();
 
 const menuArr = reactive([
   {
